@@ -17,7 +17,8 @@ web-build/
 *.mobileprovision
 #IOS
 ios/
-
+#ANDROID
+android/
 # Metro
 .metro-health-check*
 
