@@ -1,0 +1,102 @@
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+interface CardProps {
+  title: string;
+  backgroundImage: any;
+  variant?: "small" | "large";
+  onPress?: () => void;
+}
+
+const Card: React.FC<CardProps> = ({
+  title,
+  backgroundImage,
+  variant = "large",
+  onPress,
+}) => {
+  const cardStyles = variant === "small" ? smallCardStyles : largeCardStyles;
+
+  return (
+    <View style={cardStyles.card}>
+      <TouchableOpacity onPress={onPress}>
+        <ImageBackground
+          source={backgroundImage}
+          style={cardStyles.backgroundImage}
+        >
+          <Text style={cardStyles.title}>{title}</Text>
+        </ImageBackground>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const windowWidth = Dimensions.get("window").width;
+
+const largeCardStyles = StyleSheet.create({
+  card: {
+    borderRadius: 16,
+    borderColor: "#8576FF",
+    borderWidth: 1,
+    overflow: "hidden",
+    elevation: 3,
+    width: windowWidth - 40,
+    aspectRatio: 16 / 9,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  backgroundImage: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
+    margin: 16,
+  },
+});
+
+const smallCardStyles = StyleSheet.create({
+  card: {
+    borderRadius: 16,
+    borderColor: "#8576FF",
+    borderWidth: 1,
+    overflow: "hidden",
+    elevation: 3,
+    width: windowWidth / 2 - 20,
+    aspectRatio: 16 / 9,
+    marginTop: 10,
+    marginBottom: 10,
+    marginRight: 10,
+  },
+  backgroundImage: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+    objectFit: "contain",
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 5,
+    margin: 8,
+  },
+});
+
+export default Card;
