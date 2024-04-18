@@ -4,9 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 import InputField from "../components/form/InputField";
 import { CustomButton } from "../components/button";
 import { calculateFonKulvar } from "../functions/fonKulvar";
-import fonLaneDATA from "../data/fonLaneDATA";
 import calculateChakras from "../functions/calculateChakras";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import esmaulHusna from "../functions/esmaulHusna";
+import { calculateSideLane } from "../functions/yanKulvar";
+import fonLaneDATA from "../data/fonLaneDATA";
 
 interface FonLaneResultParams {
   typologyId: number;
@@ -16,6 +18,8 @@ interface FonLaneResultParams {
   name: string;
   lastname: string;
   birthdate: string;
+  sideLaneNumber: number;
+  esmaulHusnaResult: number;
 }
 
 const PremiumCalculateView: React.FC = () => {
@@ -38,25 +42,34 @@ const PremiumCalculateView: React.FC = () => {
     console.warn("A date has been picked: ", date);
     setBirthdate(date); // Tarihi state'e ata
     hideDatePicker();
-    console.log("Formatted Date:", date.toLocaleDateString());
   };
 
   const handleCalculate = () => {
     if (!name.trim() || !lastname.trim()) {
-      Alert.alert("Warning", "Please fill in all fields.");
+      Alert.alert("Warning", "Lütfen tüm alanları doldurun.");
       return;
     }
 
     if (!birthdate) {
-      Alert.alert("Warning", "Please pick a birthdate.");
+      Alert.alert("Warning", "Lütfen dogum tarihi seçin.");
       return;
     }
 
-    const conclusion = calculateFonKulvar(name, lastname, maidenName);
-    console.log("Fon Kulvar Result :", conclusion);
+    // YanKulvar Hesapla
+    const sideLaneNumber = calculateSideLane(name, lastname, maidenName);
+
+    // Esmaül Hüsna hesaplama
+    const esmaulHusnaResult = esmaulHusna(
+      `${birthdate.getDate()}.${
+        birthdate.getMonth() + 1
+      }.${birthdate.getFullYear()}`
+    );
+
+    // Fon Kulvar hesapla
+    const fonKulvarResult = calculateFonKulvar(name, lastname, maidenName);
 
     const selectedTypology = fonLaneDATA.find(
-      (typology) => typology.typologyId === conclusion
+      (typology) => typology.typologyId === fonKulvarResult
     );
 
     if (selectedTypology) {
@@ -73,8 +86,12 @@ const PremiumCalculateView: React.FC = () => {
         chakraCounts: chakraCounts,
         name: name,
         lastname: lastname,
-        birthdate: birthdate?.toLocaleDateString() || "", //Tarih'i biçimlendir
+        birthdate: birthdate?.toLocaleDateString() || "", // Tarih'i biçimlendir
+        sideLaneNumber: sideLaneNumber, // YanKulvar sonucunu ekle
+        esmaulHusnaResult: esmaulHusnaResult, // Esmaül Hüsna sonucunu ekle
       };
+
+      // Sonuç ile birlikte navigasyon
       navigation.navigate("PremiumResult", params);
     } else {
       console.error("Selected typology not found in fonLaneDATA.");

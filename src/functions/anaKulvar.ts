@@ -52,4 +52,5 @@ function sumOfDigits(num: number): number {
   return sum;
 }
 
+
 export { calculate, mainLaneDATA };

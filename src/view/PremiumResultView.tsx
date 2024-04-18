@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,32 +13,33 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
 import Star from "../components/animatebackground/Star";
 import { CustomButton } from "../components/button";
-import FonLaneCalculateView from "./FonLaneCalculateView";
+import { calculateSideLane } from "../functions/yanKulvar";
+import sideLaneDATA from "../data/sideLaneDATA";
+import mainLaneDATA from "../data/mainLaneDATA";
+import { calculate } from "../functions/anaKulvar";
+import { calculateFonKulvar } from "../functions/fonKulvar";
+import fonLaneDATA from "../data/fonLaneDATA";
 
 interface FonLaneResultProps {
   route: {
     params: {
       typologyId?: number;
-      title: string;
       description: string;
       chakraCounts: number[];
       name: string;
       lastname: string;
       birthdate: string;
+      esmaulHusnaResult: number;
+      maidenName?: string;
+      mainLaneDATA: MainLaneDataCollection;
     };
   };
 }
 
 const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
-  const typologyId = route.params.typologyId - 1;
   const navigation = useNavigation();
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
   const windowWidth = useWindowDimensions().width;
-  const [animatedValue] = React.useState(new Animated.Value(0));
+  const [animatedValue] = useState(new Animated.Value(0));
   const starColors = [
     "#FFD700",
     "#FFA500",
@@ -51,8 +52,29 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
   ];
   const numberOfStars = 500;
 
-  React.useEffect(() => {
+  const [sideLaneData, setSideLaneData] = useState<{
+    title: string;
+    description: string;
+  } | null>(null);
+
+  const [mainLaneData, setMainLaneData] = useState<{
+    title: string;
+    content: string;
+    yapiciPotansiyeller: string[];
+    olumsuzPotansiyeller: string[];
+    yikiciPotansiyeller: string[];
+  } | null>(null);
+
+  const [fonLaneData, setFonLaneData] = useState<{
+    title: string;
+    description: string;
+  } | null>(null);
+
+  useEffect(() => {
     startAnimation();
+    calculateAndSetYanKulvar();
+    calculateAndSetAnaKulvar();
+    calculateAndSetFonKulvar();
   }, []);
 
   const startAnimation = () => {
@@ -66,7 +88,47 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
     ).start();
   };
 
-  const { name, title, description, chakraCounts } = route.params; // 'user' değerini al
+  const calculateAndSetYanKulvar = () => {
+    const yanKulvar = calculateSideLane(
+      route.params.name,
+      route.params.lastname,
+      route.params.maidenName || ""
+    );
+    const data = sideLaneDATA.find((item) => item.id === yanKulvar);
+    if (data) {
+      setSideLaneData(data);
+    }
+  };
+
+  const calculateAndSetAnaKulvar = () => {
+    const anaKulvar = calculate(
+      route.params.name,
+      route.params.lastname,
+      route.params.maidenName || ""
+    );
+    const data = mainLaneDATA[anaKulvar];
+    if (data) {
+      setMainLaneData(data);
+    }
+  };
+  const calculateAndSetFonKulvar = () => {
+    const fonKulvar = calculateFonKulvar(
+      route.params.name,
+      route.params.lastname,
+      route.params.maidenName || ""
+    );
+
+    const foundFonKulvar = fonLaneDATA.find(
+      (item) => item.typologyId === fonKulvar
+    );
+    if (foundFonKulvar) {
+      setFonLaneData(foundFonKulvar);
+    }
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
 
   return (
     <View style={styles.container}>
@@ -102,23 +164,79 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
             </Text>
           </View>
           <Text style={styles.content}>{route.params.birthdate}</Text>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.content}>{description}</Text>
+          <Text style={styles.title}>Ruh Güdüsü: {mainLaneData?.title}</Text>
+          <Text style={styles.content}>
+            Ruh güdüsü, sizin dünyayı nasıl gördüğünğz ve kendinizi dünyaya
+            nasıl gösterdiğinizdir.
+          </Text>
+          <Text style={styles.descriptionItem}>{mainLaneData?.content}</Text>
+          <Text style={styles.title}>Yapıcı Potansiyeller</Text>
+          {mainLaneData?.yapiciPotansiyeller &&
+            mainLaneData.yapiciPotansiyeller.map((item, index) => (
+              <Text key={index} style={styles.descriptionItem}>
+                {item}
+              </Text>
+            ))}
+          <Text style={styles.title}>Olumsuz Potansiyeller</Text>
+          {mainLaneData?.olumsuzPotansiyeller &&
+            mainLaneData.olumsuzPotansiyeller.map((item, index) => (
+              <Text key={index} style={styles.descriptionItem}>
+                {item}
+              </Text>
+            ))}
+          <Text style={styles.title}>Yıkıcı Potansiyeller</Text>
+          {mainLaneData?.yikiciPotansiyeller &&
+            mainLaneData.yikiciPotansiyeller.map((item, index) => (
+              <Text key={index} style={styles.descriptionItem}>
+                {item}
+              </Text>
+            ))}
+          <Text style={styles.descriptionItem}>{route.params.description}</Text>
+          {sideLaneData && (
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.title}>
+                Hareketsiz Benlik:{sideLaneData.title}
+              </Text>
+              <Text style={styles.content}>
+                Hareketsiz Benlik, daha çok olgunluk yaşlarınızda dış dünyaya
+                nasıl göründüğünü umursamaz olduğunuzda, toplumdan uzak olup
+                yalnız anlarınızda belirginleştiğini görürürsünüz.
+                Bilinçaltınızın işleyiş biçimidir, ödül gibidir.İsmin hakkı
+                verilirse ödülünüzü alırsınız.
+              </Text>
+              <Text style={styles.descriptionItem}>
+                {sideLaneData.description}
+              </Text>
+            </View>
+          )}
+          {/* calculateFonKulvar sonucu */}
+          <Text style={styles.title}>Kader Sayısı: {fonLaneData?.title}</Text>
+          <Text style={styles.content}>
+            Kader sayısı, bu hayatta neyi gerçekleştireceğinizi ve kime
+            dönüşeceğinizi gösterebilen bir sayıdır. Adınızın verdiği
+            özellikleri öğrenmenizi sağlar, Dünya'ya, atalara ve mekana bağlı
+            özellikler şeklinde düşünebilirsiniz.
+          </Text>
+          <Text style={styles.descriptionItem}>{fonLaneData?.description}</Text>
           <Text style={styles.title}>Çakra Sütunu</Text>
-          {chakraCounts.map((count, index) => (
+          {route.params.chakraCounts.map((count, index) => (
             <Text key={index} style={styles.chakraItem}>
               {`${index + 1}. Çakra = ${count} Birim`}
             </Text>
           ))}
+          <Text style={styles.title}>Esma'ül Hüsna </Text>
+          <Text style={styles.descriptionItem}>
+            {route.params.esmaulHusnaResult}. Esma
+          </Text>
         </View>
       </ScrollView>
+
       <View style={{ width: "100%", marginBottom: -50 }}>
         <CustomButton title="Geri Dön" onPress={handleGoBack} />
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -149,10 +267,10 @@ const styles = StyleSheet.create({
     textAlign: "justify",
   },
   content: {
-    fontSize: 16,
+    fontSize: 10,
     marginBottom: 10,
     color: "white",
-    lineHeight: 30,
+    lineHeight: 12,
   },
   descriptionItem: {
     fontSize: 16,
