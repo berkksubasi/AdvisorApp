@@ -18,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import FonLaneCalculateView from "./src/view/FonLaneCalculateView";
 import FonLaneResultView from "./src/view/FonLaneResultView";
 import PremiumResultView from "./src/view/PremiumResultView";
+import Affirmations from "./src/view/Affirmations";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,6 +80,11 @@ const App = () => {
         <Stack.Screen
           name="PremiumResult"
           component={PremiumResultView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Affirmations"
+          component={Affirmations}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
