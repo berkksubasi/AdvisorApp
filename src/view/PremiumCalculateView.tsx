@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Alert, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import InputField from "../components/form/InputField";
 import { CustomButton } from "../components/button";
-import { calculateFonKulvar } from "../functions/fonKulvar";
-import calculateChakras from "../functions/calculateChakras";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import esmaulHusna from "../functions/esmaulHusna";
 import { calculateSideLane } from "../functions/yanKulvar";
 import fonLaneDATA from "../data/fonLaneDATA";
+import { calculateFonKulvar } from "../functions/fonKulvar";
+import calculateChakras from "../functions/calculateChakras";
+import InputFields from "../components/InputFields";
+import calculatePeakAndStruggleNumbers from "../functions/calculatePeakAndStruggleNumbers";
 
 interface FonLaneResultParams {
   typologyId: number;
@@ -20,6 +21,8 @@ interface FonLaneResultParams {
   birthdate: string;
   sideLaneNumber: number;
   esmaulHusnaResult: number;
+  peaks: number[];
+  struggles: number[];
 }
 
 const PremiumCalculateView: React.FC = () => {
@@ -46,27 +49,30 @@ const PremiumCalculateView: React.FC = () => {
 
   const handleCalculate = () => {
     if (!name.trim() || !lastname.trim()) {
-      Alert.alert("Warning", "Lütfen tüm alanları doldurun.");
+      Alert.alert("Warning", "Please fill in all fields.");
       return;
     }
 
     if (!birthdate) {
-      Alert.alert("Warning", "Lütfen dogum tarihi seçin.");
+      Alert.alert("Warning", "Please select a birthdate.");
       return;
     }
 
-    // YanKulvar Hesapla
+    // Calculate side lane
     const sideLaneNumber = calculateSideLane(name, lastname, maidenName);
 
-    // Esmaül Hüsna hesaplama
+    // Calculate Esmaül Hüsna
     const esmaulHusnaResult = esmaulHusna(
       `${birthdate.getDate()}.${
         birthdate.getMonth() + 1
       }.${birthdate.getFullYear()}`
     );
 
-    // Fon Kulvar hesapla
+    // Calculate Fon Kulvar
     const fonKulvarResult = calculateFonKulvar(name, lastname, maidenName);
+
+    // Calculate peaks and struggles
+    const { peaks, struggles } = calculatePeakAndStruggleNumbers(birthdate);
 
     const selectedTypology = fonLaneDATA.find(
       (typology) => typology.typologyId === fonKulvarResult
@@ -86,44 +92,34 @@ const PremiumCalculateView: React.FC = () => {
         chakraCounts: chakraCounts,
         name: name,
         lastname: lastname,
-        birthdate: birthdate?.toLocaleDateString() || "", // Tarih'i biçimlendir
-        sideLaneNumber: sideLaneNumber, // YanKulvar sonucunu ekle
-        esmaulHusnaResult: esmaulHusnaResult, // Esmaül Hüsna sonucunu ekle
+        birthdate: birthdate?.toLocaleDateString() || "", // Format date
+        sideLaneNumber: sideLaneNumber, // Side lane result
+        esmaulHusnaResult: esmaulHusnaResult, // Esmaül Hüsna result
+        peaks: peaks, // Peak numbers
+        struggles: struggles, // Struggle numbers
       };
 
-      // Sonuç ile birlikte navigasyon
+      // Navigate with result
       navigation.navigate("PremiumResult", params);
-    } else {
-      console.error("Selected typology not found in fonLaneDATA.");
     }
   };
 
   return (
     <View style={styles.container}>
       <Image source={require("../images/page-icon.png")} style={styles.image} />
-      <InputField
-        placeholder="Name"
-        onChangeText={(text) => setName(text)}
-        value={name}
-        placeholderTextColor="#ffffff90"
-      />
-      <InputField
-        placeholder="Lastname"
-        onChangeText={(text) => setLastname(text)}
-        placeholderTextColor="#ffffff90"
-        value={lastname}
-      />
-      <InputField
-        placeholder="Maiden Name"
-        onChangeText={(text) => setMaidenName(text)}
-        placeholderTextColor="#ffffff90"
-        value={maidenName}
+      <InputFields
+        setName={setName}
+        setLastname={setLastname}
+        setMaidenName={setMaidenName}
+        name={name}
+        lastname={lastname}
+        maidenName={maidenName}
       />
       <View style={styles.datePickerContainer}>
         <CustomButton
           style={{ width: "100%" }}
           variant="secondary"
-          title="Doğum Tarihi Seç"
+          title="Select Birthdate"
           onPress={showDatePicker}
         />
         <DateTimePicker

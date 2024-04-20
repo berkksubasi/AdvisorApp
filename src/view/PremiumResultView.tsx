@@ -12,13 +12,15 @@ import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
 import Star from "../components/animatebackground/Star";
-import { CustomButton } from "../components/button";
 import { calculateSideLane } from "../functions/yanKulvar";
 import sideLaneDATA from "../data/sideLaneDATA";
-import mainLaneDATA from "../data/mainLaneDATA";
 import { calculate } from "../functions/anaKulvar";
 import { calculateFonKulvar } from "../functions/fonKulvar";
 import fonLaneDATA from "../data/fonLaneDATA";
+import calculateAuraColor from "../functions/calculateAuraColor";
+import auraColorsDATA from "../data/auraColorsDATA";
+import { ButtonGoBack } from "../components/button";
+import mainLaneDATA from "../data/mainLaneDATA";
 
 interface FonLaneResultProps {
   route: {
@@ -31,7 +33,9 @@ interface FonLaneResultProps {
       birthdate: string;
       esmaulHusnaResult: number;
       maidenName?: string;
-      mainLaneDATA: MainLaneDataCollection;
+      mainLaneData: MainLaneDataCollection; // Typo corrected
+      peaks: number[];
+      struggles: number[];
     };
   };
 }
@@ -51,7 +55,7 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
     "#7B68EE",
   ];
   const numberOfStars = 500;
-
+  const { peaks, struggles } = route.params;
   const [sideLaneData, setSideLaneData] = useState<{
     title: string;
     description: string;
@@ -70,11 +74,20 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
     description: string;
   } | null>(null);
 
+  const [auraColor, setAuraColor] = useState<string>(""); // Aura rengi için state
+  const [colorDescription, setColorDescription] = useState<string>(""); // Renk açıklaması için state
+  const [colorPotantial, setColorPotantial] = useState<string>(""); // Renk potansiyeli için state
+
   useEffect(() => {
     startAnimation();
     calculateAndSetYanKulvar();
     calculateAndSetAnaKulvar();
     calculateAndSetFonKulvar();
+    calculateAndSetAuraColor();
+
+    // Peaks ve Struggles değerlerini logla
+    console.log("Peaks:", peaks);
+    console.log("Struggles:", struggles);
   }, []);
 
   const startAnimation = () => {
@@ -111,6 +124,7 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
       setMainLaneData(data);
     }
   };
+
   const calculateAndSetFonKulvar = () => {
     const fonKulvar = calculateFonKulvar(
       route.params.name,
@@ -123,6 +137,20 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
     );
     if (foundFonKulvar) {
       setFonLaneData(foundFonKulvar);
+    }
+  };
+
+  const calculateAndSetAuraColor = () => {
+    const aura = calculateAuraColor(route.params.birthdate); // Doğum tarihinden aura rengini hesapla
+    setAuraColor(aura); // Hesaplanan aura rengini state'e ata
+
+    // Hesaplanan aura rengi ile uyumlu veriyi auraColorsDATA'dan al ve state'leri güncelle
+    const foundAuraColor = auraColorsDATA.find(
+      (item) => item.auraColor === aura
+    );
+    if (foundAuraColor) {
+      setColorDescription(foundAuraColor.colorDescription);
+      setColorPotantial(foundAuraColor.colorPotantial);
     }
   };
 
@@ -163,12 +191,9 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
               {route.params.name} {route.params.lastname},
             </Text>
           </View>
+          {/* Ruh Güdüsü */}
           <Text style={styles.content}>{route.params.birthdate}</Text>
           <Text style={styles.title}>Ruh Güdüsü: {mainLaneData?.title}</Text>
-          <Text style={styles.content}>
-            Ruh güdüsü, sizin dünyayı nasıl gördüğünğz ve kendinizi dünyaya
-            nasıl gösterdiğinizdir.
-          </Text>
           <Text style={styles.descriptionItem}>{mainLaneData?.content}</Text>
           <Text style={styles.title}>Yapıcı Potansiyeller</Text>
           {mainLaneData?.yapiciPotansiyeller &&
@@ -191,6 +216,7 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
                 {item}
               </Text>
             ))}
+          {/* Hareketsiz Benlik */}
           <Text style={styles.descriptionItem}>{route.params.description}</Text>
           {sideLaneData && (
             <View style={styles.descriptionContainer}>
@@ -209,7 +235,7 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
               </Text>
             </View>
           )}
-          {/* calculateFonKulvar sonucu */}
+          {/* Kader Sayısı */}
           <Text style={styles.title}>Kader Sayısı: {fonLaneData?.title}</Text>
           <Text style={styles.content}>
             Kader sayısı, bu hayatta neyi gerçekleştireceğinizi ve kime
@@ -218,25 +244,59 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
             özellikler şeklinde düşünebilirsiniz.
           </Text>
           <Text style={styles.descriptionItem}>{fonLaneData?.description}</Text>
-          <Text style={styles.title}>Çakra Sütunu</Text>
+          <Text style={styles.title}>Çakra Sütunu:</Text>
+          <Text style={styles.content}>
+            Çakralar bedene enerji aktaran merkezlerdir. Bu giriş kapıları
+            blokajlandığında bedeni besleyen enerji kısıtlanmaktadır. Bu enerji
+            kısıtlaması belli organları güçsüz düşürerek hastalıklara
+            dönüşmektedir. Her çakra beynin muayyen bölgesini açan ve uyandıran
+            bir anahtar veya düğme gibidir. Birçok insanda bu enerji akımı
+            artırılabilir, canlandırılabilir ve daha iyi çalışmasına imkan
+            sağlanabilir. Çakralar enerji kanalları ile bağlantıdadır. İnsanda
+            72.000 enerji kanalı mevcuttur.
+          </Text>
           {route.params.chakraCounts.map((count, index) => (
             <Text key={index} style={styles.chakraItem}>
               {`${index + 1}. Çakra = ${count} Birim`}
             </Text>
           ))}
-          <Text style={styles.title}>Esma'ül Hüsna </Text>
+          <Text style={styles.title}>Esma'ül Hüsna: </Text>
           <Text style={styles.descriptionItem}>
             {route.params.esmaulHusnaResult}. Esma
           </Text>
+          {/* Aura rengi */}
+          <Text style={styles.title}>Aura Rengi: </Text>
+          <Text style={styles.descriptionItem}>{auraColor}</Text>
+          <Text style={styles.title}>Aura Rengi Potansiyeli:</Text>
+          <Text style={styles.descriptionItem}>{colorPotantial}</Text>
+          <Text style={styles.title}>Aura Rengi Açıklaması:</Text>
+          <Text style={styles.descriptionItem}>{colorDescription}</Text>
+
+          {/* Zirve Numaraları */}
+          <Text style={styles.title}>Zirve Numaraları:</Text>
+          {peaks.map((peak, index) => (
+            <Text key={`peak-${index}`} style={styles.descriptionItem}>
+              {`Zirve ${index + 1}: ${peak}`}
+            </Text>
+          ))}
+
+          {/* Mücadele Numaraları */}
+          <Text style={styles.title}>Mücadele Numaraları:</Text>
+          {struggles.map((struggle, index) => (
+            <Text key={`struggle-${index}`} style={styles.descriptionItem}>
+              {`Mücadele ${index + 1}: ${struggle}`}
+            </Text>
+          ))}
         </View>
       </ScrollView>
 
       <View style={{ width: "100%", marginBottom: -50 }}>
-        <CustomButton title="Geri Dön" onPress={handleGoBack} />
+        <ButtonGoBack onPress={handleGoBack} />
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -276,7 +336,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
     color: "white",
-    lineHeight: 30,
+    lineHeight: 20,
   },
   chakraItem: {
     fontSize: 16,
