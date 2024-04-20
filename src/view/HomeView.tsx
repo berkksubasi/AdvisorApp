@@ -12,6 +12,10 @@ function HomeView() {
   const numerology = () => {
     navigation.dispatch(CommonActions.navigate("PremiumCalculate"));
   };
+
+  const affirmations = () => {
+    navigation.dispatch(CommonActions.navigate("Affirmations"));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -91,6 +95,7 @@ function HomeView() {
             title="Olumlamalar "
             variant="small"
             backgroundImage={require("../images/affirmation.avif")}
+            onPress={affirmations}
           />
           <Card
             title="Meditasyonlar"
