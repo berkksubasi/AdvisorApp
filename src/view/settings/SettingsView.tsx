@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// SettingsView.tsx
+import React from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -7,33 +8,27 @@ import {
 } from "react-native";
 import { ListItem, Icon, Switch } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "../../providers/ThemeContext";
 
-const SettingsView = () => {
+const SettingsView: React.FC = () => {
   const navigation = useNavigation();
   const windowWidth = useWindowDimensions().width;
-  const [notificationSwitch, setNotificationSwitch] = useState(false);
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleTheme } = useTheme();
 
-  // Ayarlar listesi
   const settingsList = [
     {
       title: "Bildirimler",
       icon: "notifications",
       switch: true,
-      switchState: notificationSwitch,
-      onSwitchChange: () => setNotificationSwitch(!notificationSwitch),
+      switchState: false,
+      onSwitchChange: () => {},
     },
     {
       title: "Karanlık Mod",
       icon: "brightness-4",
       switch: true,
-      switchState: false,
-      onSwitchChange: () => {
-        // Karanlık modu aç/kapat fonksiyonu
-      },
+      switchState: darkMode,
+      onSwitchChange: toggleTheme,
     },
     {
       title: "Çıkış Yap",
@@ -42,7 +37,12 @@ const SettingsView = () => {
   ];
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <View style={styles.innerContainer}>
         {settingsList.map((item, index) => (
           <ListItem style={{ width: windowWidth }} key={index} bottomDivider>
@@ -66,7 +66,6 @@ const SettingsView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
   },
   innerContainer: {
     alignItems: "center",
