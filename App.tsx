@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,91 +10,93 @@ import {
 } from "./src/view";
 
 import CalculateView from "./src/view/CalculateView";
-
 import MainLaneResutView from "./src/view/MainLaneResutView";
 import SideLaneResultView from "./src/view/SideLaneResultView";
-import WelcomeView from "./src/view/WelcomeView"; // Import the WelcomeView
+import WelcomeView from "./src/view/WelcomeView";
 import { Ionicons } from "@expo/vector-icons";
 import FonLaneCalculateView from "./src/view/FonLaneCalculateView";
 import FonLaneResultView from "./src/view/FonLaneResultView";
 import PremiumResultView from "./src/view/PremiumResultView";
 import Affirmations from "./src/view/Affirmations";
 import SettingsView from "./src/view/settings/SettingsView";
+import { ThemeProvider, useTheme } from "./src/providers/ThemeContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
-        <Stack.Screen
-          name="Welcome"
-          component={WelcomeView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={LoginView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="MainLaneCalculate"
-          component={CalculateView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="FonLaneCalculate"
-          component={FonLaneCalculateView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="MainLaneResult"
-          component={MainLaneResutView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SideLaneResult"
-          component={SideLaneResultView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="FonLaneResult"
-          component={FonLaneResultView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PremiumCalculate"
-          component={PremiumCalculateView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PremiumResult"
-          component={PremiumResultView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Affirmations"
-          component={Affirmations}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Welcome">
+          <Stack.Screen
+            name="Welcome"
+            component={WelcomeView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MainLaneCalculate"
+            component={CalculateView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="FonLaneCalculate"
+            component={FonLaneCalculateView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MainLaneResult"
+            component={MainLaneResutView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SideLaneResult"
+            component={SideLaneResultView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="FonLaneResult"
+            component={FonLaneResultView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PremiumCalculate"
+            component={PremiumCalculateView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PremiumResult"
+            component={PremiumResultView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Affirmations"
+            component={Affirmations}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 };
 
 const TabNavigator = () => {
-  const [selectedTab, setSelectedTab] = useState("HomeTab");
+  const { darkMode } = useTheme(); // Tema bağlamak
 
   return (
     <Tab.Navigator
@@ -104,24 +106,24 @@ const TabNavigator = () => {
           height: 90,
           paddingHorizontal: 5,
           paddingTop: 0,
-          backgroundColor: "black",
+          backgroundColor: darkMode ? "black" : "white",
           position: "absolute",
           borderTopWidth: 0,
         },
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
-          if (route.name === "HomeTab") {
+          if (route.name === "Ana Sayfa") {
             iconName = "home";
-          } else if (route.name === "InboxTab") {
+          } else if (route.name === "Gelen Kutusu") {
             iconName = "mail";
-          } else if (route.name === "SocialTab") {
+          } else if (route.name === "Social") {
             iconName = "people";
-          } else if (route.name === "SettingsTab") {
+          } else if (route.name === "Ayarlar") {
             iconName = "settings";
           }
 
-          const iconColor = route.name === selectedTab ? "#8576FF" : "red";
+          const iconColor = color; // Renkleri doğrudan kullan
 
           return <Ionicons name={iconName} size={size} color={iconColor} />;
         },
