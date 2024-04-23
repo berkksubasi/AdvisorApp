@@ -21,6 +21,9 @@ import calculateAuraColor from "../functions/calculateAuraColor";
 import auraColorsDATA from "../data/auraColorsDATA";
 import { ButtonGoBack } from "../components/button";
 import mainLaneDATA from "../data/mainLaneDATA";
+import peakDATA from "../data/peakDATA";
+import struggleDATA from "../data/struggleDATA";
+import purposeOfLifeDATA from "../data/purposeOfLifeDATA";
 
 interface FonLaneResultProps {
   route: {
@@ -33,9 +36,10 @@ interface FonLaneResultProps {
       birthdate: string;
       esmaulHusnaResult: number;
       maidenName?: string;
-      mainLaneData: MainLaneDataCollection; // Typo corrected
+      mainLaneData: MainLaneDataCollection;
       peaks: number[];
       struggles: number[];
+      purposes: number;
     };
   };
 }
@@ -77,17 +81,30 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
   const [auraColor, setAuraColor] = useState<string>(""); // Aura rengi için state
   const [colorDescription, setColorDescription] = useState<string>(""); // Renk açıklaması için state
   const [colorPotantial, setColorPotantial] = useState<string>(""); // Renk potansiyeli için state
-
+  const [purposeTitle, setPurposeTitle] = useState<string | null>(null);
+  const [purposeID, setPurposeID] = useState<number | null>(null);
+  const [purposeDescription, setPurposeDescription] = useState<string | null>(
+    null
+  );
   useEffect(() => {
     startAnimation();
     calculateAndSetYanKulvar();
     calculateAndSetAnaKulvar();
     calculateAndSetFonKulvar();
     calculateAndSetAuraColor();
+    const purposeNumber = route.params.purposes;
 
-    // Peaks ve Struggles değerlerini logla
-    console.log("Peaks:", peaks);
-    console.log("Struggles:", struggles);
+    // Veri kaynağından hayat amacı numarasına göre amaç değerini bul
+    const foundPurpose = purposeOfLifeDATA.find(
+      (item) => item.purposeSum === purposeNumber
+    );
+
+    // Bulunan hayat amacı değerlerini state'lere set et
+    if (foundPurpose) {
+      setPurposeTitle(foundPurpose.purposeTitle);
+      setPurposeDescription(foundPurpose.purposeDescription);
+      setPurposeID(foundPurpose.purposeID);
+    }
   }, []);
 
   const startAnimation = () => {
@@ -153,6 +170,28 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
       setColorPotantial(foundAuraColor.colorPotantial);
     }
   };
+
+  // Match Peak Function
+  const matchPeakData = (peaks: number[]) => {
+    return peaks.map((peakNumber) => {
+      return peakDATA.find((peak) => peak.peakID === peakNumber);
+    });
+  };
+
+  // Match Peak Num
+  const matchedPeaks = matchPeakData(route.params.peaks);
+
+  // Match Struggle Function
+  const matchStruggleData = (struggles: number[]) => {
+    return struggles.map((struggleNumber) => {
+      return struggleDATA.find(
+        (struggle) => struggle.struggleID === struggleNumber
+      );
+    });
+  };
+
+  // Macth Struggle Num
+  const matchedStruggles = matchStruggleData(route.params.struggles);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -272,20 +311,39 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
           <Text style={styles.title}>Aura Rengi Açıklaması:</Text>
           <Text style={styles.descriptionItem}>{colorDescription}</Text>
 
+          {/* Hayat Amacı */}
+          <Text style={styles.title}>Hayat Amacı Sayısı: {purposeID}</Text>
+          <Text style={styles.title}>{purposeTitle}</Text>
+          <Text style={styles.descriptionItem}>{purposeDescription}</Text>
+
           {/* Zirve Numaraları */}
           <Text style={styles.title}>Zirve Numaraları:</Text>
-          {peaks.map((peak, index) => (
-            <Text key={`peak-${index}`} style={styles.descriptionItem}>
-              {`Zirve ${index + 1}: ${peak}`}
-            </Text>
+          {matchedPeaks.map((peak, index) => (
+            <View key={index}>
+              <Text style={styles.title}>{`${index + 1}. Zirve: ${
+                peak ? peak.peakTitle : "Bilinmeyen"
+              }`}</Text>
+              {peak && (
+                <Text style={styles.descriptionItem}>
+                  {peak.peakDescription}
+                </Text>
+              )}
+            </View>
           ))}
 
           {/* Mücadele Numaraları */}
           <Text style={styles.title}>Mücadele Numaraları:</Text>
-          {struggles.map((struggle, index) => (
-            <Text key={`struggle-${index}`} style={styles.descriptionItem}>
-              {`Mücadele ${index + 1}: ${struggle}`}
-            </Text>
+          {matchedStruggles.map((struggle, index) => (
+            <View key={index}>
+              <Text style={styles.title}>{`${index + 1}. Mücadele:${
+                struggle ? struggle.struggleTitle : "Bilinmeyen"
+              }`}</Text>
+              {struggle && (
+                <Text style={styles.descriptionItem}>
+                  {struggle.struggleDescription}
+                </Text>
+              )}
+            </View>
           ))}
         </View>
       </ScrollView>

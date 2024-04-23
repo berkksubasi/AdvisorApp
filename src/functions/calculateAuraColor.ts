@@ -1,9 +1,16 @@
-function calculateAuraColor(birthDate: string): string {
+
+const birthdate: Date = new Date(); // Replace this with the actual birthdate value
+const auraColor: string = calculateAuraColor(birthdate);
+function calculateAuraColor(birthDate: Date): string {
   // Tarihi parçalara ayır
-  const [_day, _month, _year] = birthDate.split("/");
-  const day: number = parseInt(_day);
-  const month: number = parseInt(_month);
-  const year: number = parseInt(_year);
+  const options = { day: 'numeric', month: 'numeric', year: 'numeric' }; // Tarih formatı seçenekleri
+  const parcalar: number[] = birthdate.toLocaleDateString('en-US', options).split("/").map(Number); // İngilizce tarih formatı kullanıldı
+  const day: number = parcalar[1];
+  const month: number = parcalar[0];
+  const year: number = parcalar[2];
+
+
+
 
   // Rakamları topla
   let sum: number = day + month + year;

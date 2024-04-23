@@ -1,9 +1,10 @@
 "use strict";
 
 const calculatePeakAndStruggleNumbers = (birthdate: Date) => {
-  const parcalar: number[] = birthdate.toLocaleDateString().split("/").map(Number);
-  const day: number = parcalar[0];
-  const month: number = parcalar[1];
+  const options = { day: 'numeric', month: 'numeric', year: 'numeric' }; // Tarih formatı seçenekleri
+  const parcalar: number[] = birthdate.toLocaleDateString('en-US', options).split("/").map(Number); // İngilizce tarih formatı 
+  const day: number = parcalar[1];
+  const month: number = parcalar[0];
   const year: number = parcalar[2];
 
   const reduceToOneDigitExceptException = (num: number): number => {

@@ -10,6 +10,7 @@ import { calculateFonKulvar } from "../functions/fonKulvar";
 import calculateChakras from "../functions/calculateChakras";
 import InputFields from "../components/InputFields";
 import calculatePeakAndStruggleNumbers from "../functions/calculatePeakAndStruggleNumbers";
+import calculatePurposeOfLife from "../functions/calculatePurposeOfLife";
 
 interface FonLaneResultParams {
   typologyId: number;
@@ -23,6 +24,7 @@ interface FonLaneResultParams {
   esmaulHusnaResult: number;
   peaks: number[];
   struggles: number[];
+  purposes: number;
 }
 
 const PremiumCalculateView: React.FC = () => {
@@ -42,7 +44,7 @@ const PremiumCalculateView: React.FC = () => {
   };
 
   const handleConfirm = (date: Date) => {
-    console.warn("A date has been picked: ", date);
+    console.log("A date has been picked: ", date);
     setBirthdate(date); // Tarihi state'e ata
     hideDatePicker();
   };
@@ -73,6 +75,8 @@ const PremiumCalculateView: React.FC = () => {
 
     // Calculate peaks and struggles
     const { peaks, struggles } = calculatePeakAndStruggleNumbers(birthdate);
+    // Calculate Purpose of Life
+    const purposes = calculatePurposeOfLife(birthdate);
 
     const selectedTypology = fonLaneDATA.find(
       (typology) => typology.typologyId === fonKulvarResult
@@ -97,6 +101,7 @@ const PremiumCalculateView: React.FC = () => {
         esmaulHusnaResult: esmaulHusnaResult, // Esmaül Hüsna result
         peaks: peaks, // Peak numbers
         struggles: struggles, // Struggle numbers
+        purposes: purposes, // Purpose Numbers
       };
 
       // Navigate with result
