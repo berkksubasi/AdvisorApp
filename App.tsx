@@ -19,6 +19,7 @@ import FonLaneCalculateView from "./src/view/FonLaneCalculateView";
 import FonLaneResultView from "./src/view/FonLaneResultView";
 import PremiumResultView from "./src/view/PremiumResultView";
 import Affirmations from "./src/view/Affirmations";
+import SettingsView from "./src/view/settings/SettingsView";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -116,6 +117,8 @@ const TabNavigator = () => {
             iconName = "mail";
           } else if (route.name === "SocialTab") {
             iconName = "people";
+          } else if (route.name === "SettingsTab") {
+            iconName = "settings";
           }
 
           const iconColor = route.name === selectedTab ? "#8576FF" : "red";
@@ -154,6 +157,17 @@ const TabNavigator = () => {
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people" size={size} color={color} />
+          ),
+          tabBarActiveTintColor: "#8576FF",
+        }}
+      />
+      <Tab.Screen
+        name="Ayarlar"
+        component={SettingsView}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" size={size} color={color} />
           ),
           tabBarActiveTintColor: "#8576FF",
         }}

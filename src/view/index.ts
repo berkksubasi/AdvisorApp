@@ -9,6 +9,10 @@ export { default as PremiumCalculateView } from "./PremiumCalculateView"
 export { default as PremiumResultView } from "./PremiumResultView"
 
 export { default as FonLaneCalculateView } from "./FonLaneCalculateView"
+export { default as FonLaneResultView } from "./FonLaneResultView"
+
 export { default as SideLaneResultView } from "./SideLaneResultView"
+
+
 
 export { default as HomeView } from "./HomeView"

@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Avatar, Icon, Image } from "react-native-elements";
 import { Card } from "../components/card";
-import { calculate } from "../functions/anaKulvar";
 
 function HomeView() {
   const navigation = useNavigation();
