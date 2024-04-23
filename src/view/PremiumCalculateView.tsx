@@ -11,6 +11,7 @@ import calculateChakras from "../functions/calculateChakras";
 import InputFields from "../components/InputFields";
 import calculatePeakAndStruggleNumbers from "../functions/calculatePeakAndStruggleNumbers";
 import calculatePurposeOfLife from "../functions/calculatePurposeOfLife";
+import { useTheme } from "../providers/ThemeContext";
 
 interface FonLaneResultParams {
   typologyId: number;
@@ -34,6 +35,7 @@ const PremiumCalculateView: React.FC = () => {
   const [birthdate, setBirthdate] = useState<Date | undefined>(undefined);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const navigation = useNavigation();
+  const { darkMode, toggleTheme } = useTheme();
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -110,7 +112,12 @@ const PremiumCalculateView: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <Image source={require("../images/page-icon.png")} style={styles.image} />
       <InputFields
         setName={setName}
