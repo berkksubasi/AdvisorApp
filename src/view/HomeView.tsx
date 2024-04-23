@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Avatar, Icon, Image } from "react-native-elements";
 import { Card } from "../components/card";
+import { useTheme } from "../providers/ThemeContext";
 
 function HomeView() {
   const navigation = useNavigation();
+  const { darkMode } = useTheme();
 
   const windowWidth = useWindowDimensions().width;
   const numerology = () => {
@@ -16,7 +18,12 @@ function HomeView() {
     navigation.dispatch(CommonActions.navigate("Affirmations"));
   };
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <View style={styles.header}>
         <View style={styles.profile}>
           <View style={styles.currency}>
@@ -117,7 +124,6 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
     width: "100%",
     height: "100%",
-    backgroundColor: "black",
   },
   header: {
     alignItems: "center",
