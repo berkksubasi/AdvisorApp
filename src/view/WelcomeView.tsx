@@ -2,16 +2,25 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { CustomButton } from "../components/button";
+import { useTheme } from "../providers/ThemeContext";
 
 const WelcomeView = ({ navigation }) => {
+  const { darkMode, toggleTheme } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <Image style={styles.image} source={require("../../assets/icon.png")} />
       <Text
         style={{
           textAlign: "center",
-          color: "white",
+          color: darkMode ? "white" : "black",
           width: "65%",
+          backgroundColor: darkMode ? "black" : "white",
         }}
       >
         Soul Touch ile ruhunuzun derinliklerine{"\n"}dokunacak bir yolculuğa
@@ -28,7 +37,7 @@ const WelcomeView = ({ navigation }) => {
         />
         <CustomButton
           title="Kaydol"
-          variant="secondary"
+          variant="primary"
           onPress={() => {
             navigation.navigate("Register");
           }}
@@ -44,12 +53,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "black",
   },
   containerInner: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "black",
     width: "100%",
   },
   image: {

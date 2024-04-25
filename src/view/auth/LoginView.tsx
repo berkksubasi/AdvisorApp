@@ -4,12 +4,14 @@ import { Image, Input, Text } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { CustomButton } from "../../components/button";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTheme } from "../../providers/ThemeContext";
 
 function LoginView() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
+  const { darkMode, toggleTheme } = useTheme();
 
   const handleLogin = () => {
     if (!userName.trim() || !password.trim()) {
@@ -34,7 +36,12 @@ function LoginView() {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <Image
         source={require("../../images/page-icon.png")}
         style={{
@@ -47,20 +54,23 @@ function LoginView() {
         placeholder="Email"
         onChangeText={(text) => setUserName(text)}
         value={userName}
-        style={styles.input}
+        style={[styles.input, { color: darkMode ? "white" : "black" }]}
       />
       <Input
         placeholder="Şifre"
         onChangeText={(text) => setPassword(text)}
         value={password}
-        placeholderTextColor={"#ffffff90"}
         secureTextEntry
-        style={styles.input}
+        style={[styles.input, { color: darkMode ? "white" : "black" }]}
       />
 
       <CustomButton title="Giriş Yap" onPress={handleLogin} />
       <View style={styles.registerLink}>
-        <Text style={styles.registerText}>Hesabınız yok mu?</Text>
+        <Text
+          style={[styles.registerText, { color: darkMode ? "white" : "black" }]}
+        >
+          Hesabınız yok mu?
+        </Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Register" as never)}
         >
@@ -82,7 +92,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "black",
   },
   input: {
     color: "white",
