@@ -20,6 +20,7 @@ import PremiumResultView from "./src/view/PremiumResultView";
 import Affirmations from "./src/view/Affirmations";
 import SettingsView from "./src/view/settings/SettingsView";
 import { ThemeProvider, useTheme } from "./src/providers/ThemeContext";
+import EditProfile from "./src/view/settings/EditProfile";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -87,6 +88,11 @@ const App = () => {
           <Stack.Screen
             name="Affirmations"
             component={Affirmations}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

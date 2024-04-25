@@ -9,13 +9,16 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface CardProps {
-  title: string;
-  backgroundImage: any;
+  title?: string;
+  backgroundImage?: any;
   variant?: "small" | "large";
   onPress?: () => void;
+  style?: any;
+  children?: React.ReactNode;
 }
 
 const Card: React.FC<CardProps> = ({
+  children,
   title,
   backgroundImage,
   variant = "large",
@@ -30,6 +33,7 @@ const Card: React.FC<CardProps> = ({
           source={backgroundImage}
           style={cardStyles.backgroundImage}
         >
+          {children}
           <Text style={cardStyles.title}>{title}</Text>
         </ImageBackground>
       </TouchableOpacity>
@@ -46,7 +50,7 @@ const largeCardStyles = StyleSheet.create({
     borderWidth: 1,
     overflow: "hidden",
     elevation: 3,
-    width: windowWidth - 40,
+    width: windowWidth - 30,
     aspectRatio: 16 / 9,
     marginTop: 20,
     marginBottom: 20,

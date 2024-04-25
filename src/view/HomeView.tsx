@@ -26,15 +26,27 @@ function HomeView() {
     >
       <View style={styles.header}>
         <View style={styles.profile}>
-          <View style={styles.currency}>
+          <View
+            style={[
+              styles.currency,
+              { borderColor: darkMode ? "white" : "black" },
+            ]}
+          >
             <Icon
               name="dollar-sign"
               type="feather"
-              color="white"
+              color={darkMode ? "white" : "black"}
               size={24}
               style={styles.currencyIcon}
             />
-            <Text style={styles.currencyText}>0.1</Text>
+            <Text
+              style={[
+                styles.currencyText,
+                { color: darkMode ? "white" : "black" },
+              ]}
+            >
+              0.1
+            </Text>
           </View>
           <Image
             source={require("../images/logoText.png")}
@@ -50,7 +62,11 @@ function HomeView() {
             iconStyle={styles.avatarIcon}
           />
         </View>
-        <Text style={styles.greeting}>Merhaba, Berk Subaşı</Text>
+        <Text
+          style={[styles.greeting, { color: darkMode ? "white" : "black" }]}
+        >
+          Merhaba, Berk Subaşı
+        </Text>
         <Card
           title="Numeroloji Analizi"
           backgroundImage={require("../images/result.png")}

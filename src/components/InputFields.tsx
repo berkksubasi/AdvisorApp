@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+// InputFields.tsx
+
+import React from "react";
 import { View, StyleSheet } from "react-native";
-import InputField from "./form/InputField";
+import { useTheme } from "../providers/ThemeContext";
+import InputField from "../shared/InputField";
 
 interface InputFieldsProps {
   setName: (name: string) => void;
@@ -19,24 +22,29 @@ const InputFields: React.FC<InputFieldsProps> = ({
   lastname,
   maidenName,
 }) => {
+  const { darkMode, toggleTheme } = useTheme();
+
   return (
     <View style={styles.container}>
       <InputField
         placeholder="Name"
         onChangeText={(text) => setName(text)}
         value={name}
-        placeholderTextColor="#ffffff90"
+        placeholderTextColor={darkMode ? "#ffffff90" : "#00000090"}
+        inputTextColor={darkMode ? "#ffffff" : "#000000"}
       />
       <InputField
         placeholder="Lastname"
         onChangeText={(text) => setLastname(text)}
-        placeholderTextColor="#ffffff90"
+        placeholderTextColor={darkMode ? "#ffffff90" : "#00000090"}
+        inputTextColor={darkMode ? "#ffffff" : "#000000"}
         value={lastname}
       />
       <InputField
         placeholder="Maiden Name"
         onChangeText={(text) => setMaidenName(text)}
-        placeholderTextColor="#ffffff90"
+        placeholderTextColor={darkMode ? "#ffffff90" : "#00000090"}
+        inputTextColor={darkMode ? "#ffffff" : "#000000"}
         value={maidenName}
       />
     </View>

@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { useTheme } from "../../providers/ThemeContext";
 
 interface RuhGudusuProps {
   title: string;
@@ -17,28 +18,60 @@ const RuhGudusu: React.FC<RuhGudusuProps> = ({
   olumsuzPotansiyeller,
   yikiciPotansiyeller,
 }) => {
+  const { darkMode, toggleTheme } = useTheme();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ruh Güdüsü: {title}</Text>
-      <Text style={styles.descriptionItem}>{content}</Text>
-      <Text style={styles.title}>Yapıcı Potansiyeller</Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Ruh Güdüsü: {title}
+      </Text>
+      <Text
+        style={[
+          styles.descriptionItem,
+          { color: darkMode ? "white" : "black" },
+        ]}
+      >
+        {content}
+      </Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Yapıcı Potansiyeller
+      </Text>
       {yapiciPotansiyeller &&
         yapiciPotansiyeller.map((item, index) => (
-          <Text key={index} style={styles.descriptionItem}>
+          <Text
+            style={[
+              styles.descriptionItem,
+              { color: darkMode ? "white" : "black" },
+            ]}
+          >
             {item}
           </Text>
         ))}
-      <Text style={styles.title}>Olumsuz Potansiyeller</Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Olumsuz Potansiyeller
+      </Text>
       {olumsuzPotansiyeller &&
         olumsuzPotansiyeller.map((item, index) => (
-          <Text key={index} style={styles.descriptionItem}>
+          <Text
+            style={[
+              styles.descriptionItem,
+              { color: darkMode ? "white" : "black" },
+            ]}
+          >
             {item}
           </Text>
         ))}
-      <Text style={styles.title}>Yıkıcı Potansiyeller</Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Yıkıcı Potansiyeller
+      </Text>
       {yikiciPotansiyeller &&
         yikiciPotansiyeller.map((item, index) => (
-          <Text key={index} style={styles.descriptionItem}>
+          <Text
+            style={[
+              styles.descriptionItem,
+              { color: darkMode ? "white" : "black" },
+            ]}
+          >
             {item}
           </Text>
         ))}

@@ -28,6 +28,7 @@ const InfoBox = ({
   return (
     <View style={styles.container}>
       <RuhGudusu
+        key={1}
         title={mainLaneData?.title}
         content={mainLaneData?.content}
         yapiciPotansiyeller={mainLaneData?.yapiciPotansiyeller}
@@ -35,27 +36,31 @@ const InfoBox = ({
         yikiciPotansiyeller={mainLaneData?.yikiciPotansiyeller}
       />
       <HareketsizBenlik
+        key={2}
         title={sideLaneData?.title}
         description={sideLaneData?.description}
       />
       <KaderSayisi
+        key={3}
         title={fonLaneData?.title}
         description={fonLaneData?.description}
       />
-      <ChakraSutunu chakraCounts={chakraCounts} />
-      <EsmaulHusna esmaulHusnaResult={esmaulHusnaResult.toString()} />
+      <ChakraSutunu key={4} chakraCounts={chakraCounts} />
+      <EsmaulHusna key={5} esmaulHusnaResult={esmaulHusnaResult.toString()} />
       <AuraRengi
+        key={6}
         auraColor={auraColor}
         colorDescription={colorDescription}
         colorPotantial={colorPotantial}
       />
       <HayatAmaci
+        key={7}
         purposeID={purposeID}
         purposeTitle={purposeTitle}
         purposeDescription={purposeDescription}
       />
-      <ZirveNumaralari matchedPeaks={matchedPeaks} />
-      <MucadeleNumaralari matchedStruggles={matchedStruggles} />
+      <ZirveNumaralari key={8} matchedPeaks={matchedPeaks} />
+      <MucadeleNumaralari key={9} matchedStruggles={matchedStruggles} />
     </View>
   );
 };
@@ -63,8 +68,10 @@ const InfoBox = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#8576FF10",
+    borderRadius: 16,
   },
 });
 

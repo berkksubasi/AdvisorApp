@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { useTheme } from "../../providers/ThemeContext";
 
 interface HayatAmaciProps {
   purposeID: number;
@@ -12,11 +13,23 @@ const HayatAmaci: React.FC<HayatAmaciProps> = ({
   purposeTitle,
   purposeDescription,
 }) => {
+  const { darkMode, toggleTheme } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hayat Amacı Sayısı: {purposeID}</Text>
-      <Text style={styles.title}>{purposeTitle}</Text>
-      <Text style={styles.descriptionItem}>{purposeDescription}</Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Hayat Amacı Sayısı: {purposeID}
+      </Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        {purposeTitle}
+      </Text>
+      <Text
+        style={[
+          styles.descriptionItem,
+          { color: darkMode ? "white" : "black" },
+        ]}
+      >
+        {purposeDescription}
+      </Text>
     </View>
   );
 };

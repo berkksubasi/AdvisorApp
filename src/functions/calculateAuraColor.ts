@@ -1,16 +1,16 @@
+import moment from 'moment';
 
-const birthdate: Date = new Date(); // Replace this with the actual birthdate value
-const auraColor: string = calculateAuraColor(birthdate);
-function calculateAuraColor(birthDate: Date): string {
+const calculateAuraColor = (birthdate: Date): string => {
+  // Tarihi moment ile biçimlendir
+  const formattedDate = moment(birthdate).format('DD-MM-YYYY');
+  console.log("Formatted Date:", formattedDate);
+
   // Tarihi parçalara ayır
-  const options = { day: 'numeric', month: 'numeric', year: 'numeric' }; // Tarih formatı seçenekleri
-  const parcalar: number[] = birthdate.toLocaleDateString('en-US', options).split("/").map(Number); // İngilizce tarih formatı kullanıldı
-  const day: number = parcalar[1];
-  const month: number = parcalar[0];
-  const year: number = parcalar[2];
+  const day: number = moment(birthdate).date();
+  const month: number = moment(birthdate).month() + 1; // Moment'te aylar 0'dan başlar, bu yüzden 1 ekleyin
+  const year: number = moment(birthdate).year();
 
-
-
+  console.log("Parçalar:", day, month, year);
 
   // Rakamları topla
   let sum: number = day + month + year;
@@ -29,7 +29,7 @@ function calculateAuraColor(birthDate: Date): string {
       temp = Math.floor(temp / 10);
     }
   }
-  console.log("Tek haneli sonuç:", sum);
+  console.log("Tek haneli sonuç Aura:", sum);
 
   // Aura rengini döndür
   switch (sum) {

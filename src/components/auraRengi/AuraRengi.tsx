@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { useTheme } from "../../providers/ThemeContext";
 
 interface AuraRengiProps {
   auraColor: string;
@@ -12,14 +13,42 @@ const AuraRengi: React.FC<AuraRengiProps> = ({
   colorPotantial,
   colorDescription,
 }) => {
+  const { darkMode, toggleTheme } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Aura Rengi: </Text>
-      <Text style={styles.descriptionItem}>{auraColor}</Text>
-      <Text style={styles.title}>Aura Rengi Potansiyeli:</Text>
-      <Text style={styles.descriptionItem}>{colorPotantial}</Text>
-      <Text style={styles.title}>Aura Rengi Açıklaması:</Text>
-      <Text style={styles.descriptionItem}>{colorDescription}</Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Aura Rengi:{" "}
+      </Text>
+      <Text
+        style={[
+          styles.descriptionItem,
+          { color: darkMode ? "white" : "black" },
+        ]}
+      >
+        {auraColor}
+      </Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Aura Rengi Potansiyeli:
+      </Text>
+      <Text
+        style={[
+          styles.descriptionItem,
+          { color: darkMode ? "white" : "black" },
+        ]}
+      >
+        {colorPotantial}
+      </Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Aura Rengi Açıklaması:
+      </Text>
+      <Text
+        style={[
+          styles.descriptionItem,
+          { color: darkMode ? "white" : "black" },
+        ]}
+      >
+        {colorDescription}
+      </Text>
     </View>
   );
 };

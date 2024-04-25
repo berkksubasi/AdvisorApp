@@ -1,16 +1,20 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { useTheme } from "../../providers/ThemeContext";
 
 interface ChakraSutunuProps {
   chakraCounts: number[];
 }
 
 const ChakraSutunu: React.FC<ChakraSutunuProps> = ({ chakraCounts }) => {
+  const { darkMode, toggleTheme } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Çakra Sütunu:</Text>
-      <Text style={styles.content}>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        Çakra Sütunu:
+      </Text>
+      <Text style={[styles.content, { color: darkMode ? "white" : "black" }]}>
         Çakralar bedene enerji aktaran merkezlerdir. Bu giriş kapıları
         blokajlandığında bedeni besleyen enerji kısıtlanmaktadır. Bu enerji
         kısıtlaması belli organları güçsüz düşürerek hastalıklara dönüşmektedir.
@@ -21,7 +25,10 @@ const ChakraSutunu: React.FC<ChakraSutunuProps> = ({ chakraCounts }) => {
         mevcuttur.
       </Text>
       {chakraCounts.map((count, index) => (
-        <Text key={index} style={styles.chakraItem}>
+        <Text
+          key={index}
+          style={[styles.chakraItem, { color: darkMode ? "white" : "black" }]}
+        >
           {`${index + 1}. Çakra = ${count} Birim`}
         </Text>
       ))}

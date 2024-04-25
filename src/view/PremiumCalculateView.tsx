@@ -12,6 +12,7 @@ import InputFields from "../components/InputFields";
 import calculatePeakAndStruggleNumbers from "../functions/calculatePeakAndStruggleNumbers";
 import calculatePurposeOfLife from "../functions/calculatePurposeOfLife";
 import { useTheme } from "../providers/ThemeContext";
+import calculateAuraColor from "../functions/calculateAuraColor";
 
 interface FonLaneResultParams {
   typologyId: number;
@@ -26,6 +27,7 @@ interface FonLaneResultParams {
   peaks: number[];
   struggles: number[];
   purposes: number;
+  auraColor: string;
 }
 
 const PremiumCalculateView: React.FC = () => {
@@ -44,21 +46,20 @@ const PremiumCalculateView: React.FC = () => {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-
   const handleConfirm = (date: Date) => {
-    console.log("A date has been picked: ", date);
+    console.log("Selected birthdateee:", date);
     setBirthdate(date); // Tarihi state'e ata
     hideDatePicker();
   };
 
   const handleCalculate = () => {
     if (!name.trim() || !lastname.trim()) {
-      Alert.alert("Warning", "Please fill in all fields.");
+      Alert.alert("Uyarı", "Lütfen tüm alanları doldurun.");
       return;
     }
 
     if (!birthdate) {
-      Alert.alert("Warning", "Please select a birthdate.");
+      Alert.alert("Uyarı", "Lütfen tarih seçin.");
       return;
     }
 
@@ -77,8 +78,12 @@ const PremiumCalculateView: React.FC = () => {
 
     // Calculate peaks and struggles
     const { peaks, struggles } = calculatePeakAndStruggleNumbers(birthdate);
+
     // Calculate Purpose of Life
     const purposes = calculatePurposeOfLife(birthdate);
+
+    // Calculate Aura Color
+    const auraColor = calculateAuraColor(birthdate);
 
     const selectedTypology = fonLaneDATA.find(
       (typology) => typology.typologyId === fonKulvarResult
@@ -98,12 +103,18 @@ const PremiumCalculateView: React.FC = () => {
         chakraCounts: chakraCounts,
         name: name,
         lastname: lastname,
-        birthdate: birthdate?.toLocaleDateString() || "", // Format date
+        birthdate: `${birthdate.getFullYear()}-${(birthdate.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${birthdate
+          .getDate()
+          .toString()
+          .padStart(2, "0")}`,
         sideLaneNumber: sideLaneNumber, // Side lane result
         esmaulHusnaResult: esmaulHusnaResult, // Esmaül Hüsna result
         peaks: peaks, // Peak numbers
         struggles: struggles, // Struggle numbers
         purposes: purposes, // Purpose Numbers
+        auraColor: auraColor, // Aura Color
       };
 
       // Navigate with result
@@ -128,12 +139,6 @@ const PremiumCalculateView: React.FC = () => {
         maidenName={maidenName}
       />
       <View style={styles.datePickerContainer}>
-        <CustomButton
-          style={{ width: "100%" }}
-          variant="secondary"
-          title="Select Birthdate"
-          onPress={showDatePicker}
-        />
         <DateTimePicker
           isVisible={isDatePickerVisible}
           mode="date"
@@ -141,7 +146,12 @@ const PremiumCalculateView: React.FC = () => {
           onCancel={hideDatePicker}
         />
       </View>
-      <CustomButton title="Calculate" onPress={handleCalculate} />
+      <CustomButton
+        style={{ marginTop: 80 }}
+        title="Doğum Tarihi Seç"
+        onPress={showDatePicker}
+      />
+      <CustomButton title="Hesapla" onPress={handleCalculate} />
     </View>
   );
 };
