@@ -7,9 +7,9 @@ import {
   Animated,
   Easing,
   ScrollView,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "react-native-elements";
 import Star from "../components/animatebackground/Star";
 import { calculateSideLane } from "../functions/yanKulvar";
 import sideLaneDATA from "../data/sideLaneDATA";
@@ -24,7 +24,7 @@ import peakDATA from "../data/peakDATA";
 import struggleDATA from "../data/struggleDATA";
 import purposeOfLifeDATA from "../data/purposeOfLifeDATA";
 import InfoBox from "../components/infoBox/InfoBox";
-
+import { useTheme } from "../providers/ThemeContext";
 interface FonLaneResultProps {
   route: {
     params: {
@@ -43,9 +43,9 @@ interface FonLaneResultProps {
     };
   };
 }
-
 const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
   const navigation = useNavigation();
+  const { darkMode, toggleTheme } = useTheme();
   const windowWidth = useWindowDimensions().width;
   const [animatedValue] = useState(new Animated.Value(0));
   const starColors = [
@@ -181,7 +181,12 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <Animated.View style={styles.background}>
         {[...Array(numberOfStars)].map((_, index) => (
           <Star
@@ -197,25 +202,33 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
         ))}
       </Animated.View>
 
-      <Image
-        source={require("../images/result.png")}
-        style={{
-          width: windowWidth - 40,
-          height: (windowWidth - 40) * 0.3,
-          resizeMode: "contain",
-        }}
-      />
+      <Image source={require("../images/result.png")} style={styles.image} />
 
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollView}
+      >
         <View style={styles.descriptionContainer}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ ...styles.title, fontWeight: "300" }}>Sevgili </Text>
-            <Text style={styles.title}>
+          <View style={styles.nameContainer}>
+            <Text
+              style={[styles.nameText, { color: darkMode ? "white" : "black" }]}
+            >
+              Sevgili{" "}
+            </Text>
+            <Text
+              style={[styles.nameText, { color: darkMode ? "white" : "black" }]}
+            >
               {route.params.name} {route.params.lastname},
             </Text>
           </View>
-          <Text style={styles.content}>{route.params.birthdate}</Text>
-
+          <Text
+            style={[
+              styles.birthdateText,
+              { color: darkMode ? "white" : "black" },
+            ]}
+          >
+            {route.params.birthdate}
+          </Text>
           <InfoBox
             auraColor={auraColor}
             chakraCounts={route.params.chakraCounts}
@@ -234,9 +247,7 @@ const PremiumResultView: React.FC<FonLaneResultProps> = ({ route }) => {
         </View>
       </ScrollView>
 
-      <View style={{ width: "100%", marginBottom: -50 }}>
-        <ButtonGoBack onPress={handleGoBack} />
-      </View>
+      <ButtonGoBack onPress={handleGoBack} />
     </View>
   );
 };
@@ -246,46 +257,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
-    paddingTop: 100,
-    paddingBottom: 100,
-    width: "100%",
-    height: "100%",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     backgroundColor: "black",
-  },
-  resultText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#fff",
-  },
-  descriptionContainer: {
-    width: "100%",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 20,
-    color: "white",
-    textAlign: "justify",
-  },
-  content: {
-    fontSize: 10,
-    marginBottom: 10,
-    color: "yellow",
-  },
-  descriptionItem: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: "white",
-    lineHeight: 20,
-  },
-  chakraItem: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: "white",
-    lineHeight: 30,
+    marginTop: -20,
   },
   background: {
     position: "absolute",
@@ -293,6 +268,33 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  image: {
+    width: "100%",
+    height: "30%",
+    resizeMode: "contain",
+    marginBottom: -50,
+  },
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+  },
+  descriptionContainer: {
+    alignItems: "center",
+  },
+  nameContainer: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  nameText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "justify",
+  },
+  birthdateText: {
+    fontSize: 10,
+    marginBottom: 10,
   },
 });
 
