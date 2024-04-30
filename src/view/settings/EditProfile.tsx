@@ -5,6 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { CustomButton } from "../../components/button";
 import RNPickerSelect from "react-native-picker-select";
 import { useTheme } from "../../providers/ThemeContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 const EditProfile: React.FC = () => {
   const [name, setName] = useState("");
@@ -77,6 +78,7 @@ const EditProfile: React.FC = () => {
         onChangeText={onChangeText}
         inputStyle={styles.input}
         containerStyle={styles.inputContainer}
+        inputContainerStyle={styles.inputInnerContainer}
       />
     );
   };
@@ -97,97 +99,103 @@ const EditProfile: React.FC = () => {
         { backgroundColor: darkMode ? "black" : "white" },
       ]}
     >
-      <View style={styles.avatarContainer}>
-        <TouchableOpacity onPress={selectAvatar}>
-          <Avatar
-            rounded
-            size="large"
-            source={{ uri: avatarUrl }}
-            containerStyle={styles.avatar}
-          />
-        </TouchableOpacity>
-      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.avatarContainer}>
+          <TouchableOpacity onPress={selectAvatar}>
+            <Avatar
+              rounded
+              size="large"
+              source={{ uri: avatarUrl }}
+              containerStyle={styles.avatar}
+            />
+          </TouchableOpacity>
+        </View>
 
-      {renderInput("Ad Soyad", name, setName)}
-      {renderInput("E-posta", email, setEmail)}
+        {renderInput("Ad Soyad", name, setName)}
+        {renderInput("E-posta", email, setEmail)}
 
-      <RNPickerSelect
-        placeholder={{ label: "Cinsiyet Seçiniz", value: null }}
-        onValueChange={(value) => setGender(value)}
-        items={[
-          { label: "Kadın", value: "female" },
-          { label: "Erkek", value: "male" },
-        ]}
-        style={{
-          inputIOS: styles.pickerInput,
-          inputAndroid: styles.pickerInput,
-        }}
-      />
-
-      <TouchableOpacity
-        style={styles.datePickerContainer}
-        onPress={showDatePicker}
-      >
-        <Text style={styles.datePickerText}>
-          {selectedBirthDate
-            ? `Seçilen Doğum Tarihi: ${selectedBirthDate}`
-            : "Doğum Tarihi Seç"}
-        </Text>
-      </TouchableOpacity>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirmDate}
-        onCancel={hideDatePicker}
-        cancelTextIOS="İptal"
-        confirmTextIOS="Tamam"
-      />
-
-      <TouchableOpacity
-        style={styles.datePickerContainer}
-        onPress={showTimePicker}
-      >
-        <Text style={styles.datePickerText}>
-          {selectedBirthTime
-            ? `Seçilen Doğum Saati: ${selectedBirthTime}`
-            : "Doğum Saati Seç"}
-        </Text>
-      </TouchableOpacity>
-      <DateTimePickerModal
-        isVisible={isTimePickerVisible}
-        mode="time"
-        onConfirm={handleConfirmTime}
-        onCancel={hideTimePicker}
-        is24Hour
-        cancelTextIOS="İptal"
-        confirmTextIOS="Tamam"
-      />
-
-      {renderInput("Doğum Yeri", birthPlace, setBirthPlace)}
-      {renderInput("Burcun", zodiacSign, setZodiacSign)}
-      {renderInput("Meslek", occupation, setOccupation)}
-      {renderInput("İlişki Durumu", relationshipStatus, setRelationshipStatus)}
-
-      <View style={styles.lgbtqContainer}>
-        <Text
-          style={[
-            styles.datePickerText,
-            {
-              justifyContent: "space-between",
-              flexDirection: "row",
-              flex: 1,
-              padding: 10,
-            },
+        <RNPickerSelect
+          placeholder={{ label: "Cinsiyet Seçiniz", value: null }}
+          onValueChange={(value) => setGender(value)}
+          items={[
+            { label: "Kadın", value: "female" },
+            { label: "Erkek", value: "male" },
           ]}
-        >
-          LGBTQ
-        </Text>
-        <Switch
-          value={lgbtq}
-          onValueChange={(value) => setLGBTQ(value)}
-          color="#8576FF"
+          style={{
+            inputIOS: styles.pickerInput,
+            inputAndroid: styles.pickerInput,
+          }}
         />
-      </View>
+
+        <TouchableOpacity
+          style={styles.datePickerContainer}
+          onPress={showDatePicker}
+        >
+          <Text style={styles.datePickerText}>
+            {selectedBirthDate
+              ? `Seçilen Doğum Tarihi: ${selectedBirthDate}`
+              : "Doğum Tarihi Seç"}
+          </Text>
+        </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirmDate}
+          onCancel={hideDatePicker}
+          cancelTextIOS="İptal"
+          confirmTextIOS="Tamam"
+        />
+
+        <TouchableOpacity
+          style={styles.datePickerContainer}
+          onPress={showTimePicker}
+        >
+          <Text style={styles.datePickerText}>
+            {selectedBirthTime
+              ? `Seçilen Doğum Saati: ${selectedBirthTime}`
+              : "Doğum Saati Seç"}
+          </Text>
+        </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isTimePickerVisible}
+          mode="time"
+          onConfirm={handleConfirmTime}
+          onCancel={hideTimePicker}
+          is24Hour
+          cancelTextIOS="İptal"
+          confirmTextIOS="Tamam"
+        />
+
+        {renderInput("Doğum Yeri", birthPlace, setBirthPlace)}
+        {renderInput("Burcun", zodiacSign, setZodiacSign)}
+        {renderInput("Meslek", occupation, setOccupation)}
+        {renderInput(
+          "İlişki Durumu",
+          relationshipStatus,
+          setRelationshipStatus
+        )}
+
+        <View style={styles.lgbtqContainer}>
+          <Text
+            style={[
+              styles.datePickerText,
+              {
+                justifyContent: "space-between",
+                flexDirection: "row",
+                flex: 1,
+                padding: 10,
+              },
+            ]}
+          >
+            LGBTQ
+          </Text>
+          <Switch
+            value={lgbtq}
+            onValueChange={(value) => setLGBTQ(value)}
+            color="#8576FF"
+          />
+        </View>
+      </ScrollView>
       <CustomButton
         variant="primary"
         title="Güncelle"
@@ -200,9 +208,9 @@ const EditProfile: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "center",
-    padding: 20,
+    paddingTop: 70,
+    paddingBottom: 80,
+    paddingHorizontal: 20,
   },
   avatarContainer: {
     flexDirection: "row",
@@ -210,7 +218,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   avatar: {
-    borderWidth: 1,
+    borderRadius: 50,
+    borderWidth: 2,
     borderColor: "#8576FF",
     marginBottom: 20,
   },
@@ -221,6 +230,12 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
+  },
+  inputInnerContainer: {
+    borderRadius: 10,
+    padding: 8,
+    borderWidth: 0.5,
+    borderColor: "#8576FF",
   },
   datePickerContainer: {
     marginBottom: 20,
