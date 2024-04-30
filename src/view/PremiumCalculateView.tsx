@@ -144,6 +144,8 @@ const PremiumCalculateView: React.FC = () => {
           mode="date"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
+          confirmTextIOS="Tamam"
+          cancelTextIOS="İptal"
         />
       </View>
       <CustomButton

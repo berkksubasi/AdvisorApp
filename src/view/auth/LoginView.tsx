@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { CustomButton } from "../../components/button";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTheme } from "../../providers/ThemeContext";
+import LogoText from "../../svg/LogoText";
 
 function LoginView() {
   const [userName, setUserName] = useState("");
@@ -23,15 +24,13 @@ function LoginView() {
     const isLoginSuccessful = true;
 
     if (isLoginSuccessful) {
-      // Giriş başarılı alert göster
-      Alert.alert("Başarılı", "Giriş işlemi başarıyla tamamlandı.", [
-        {
-          text: "Tamam",
-          onPress: () => navigation.navigate("Home" as never),
-        },
-      ]);
+      console.log("Giriş başarılı.");
+      navigation.navigate("Home" as never);
     } else {
-      Alert.alert("Hata", "Giriş işlemi başarısız oldu.");
+      Alert.alert(
+        "Hata",
+        "Giriş işlemi başarısız oldu. Lütfen tekrar deneyin."
+      );
     }
   };
 
@@ -47,9 +46,16 @@ function LoginView() {
         style={{
           width: 250,
           height: 250,
-          marginBottom: 30,
+          marginBottom: 10,
         }}
       />
+      <View style={{ marginBottom: 20 }}>
+        {darkMode ? (
+          <LogoText width={300} height={75} color="#fff" />
+        ) : (
+          <LogoText width={300} height={75} color="#8576FF" />
+        )}
+      </View>
       <Input
         placeholder="Email"
         onChangeText={(text) => setUserName(text)}
@@ -64,7 +70,11 @@ function LoginView() {
         style={[styles.input, { color: darkMode ? "white" : "black" }]}
       />
 
-      <CustomButton title="Giriş Yap" onPress={handleLogin} />
+      <CustomButton
+        title="Giriş Yap"
+        onPress={handleLogin}
+        style={{ marginTop: 40 }}
+      />
       <View style={styles.registerLink}>
         <Text
           style={[styles.registerText, { color: darkMode ? "white" : "black" }]}

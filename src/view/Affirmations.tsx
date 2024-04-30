@@ -13,21 +13,10 @@ import Star from "../components/animatebackground/Star";
 import rootChakraAffirmationsData from "../data/rootChakraAffirmationsData";
 import { ButtonGoBack } from "../components/button";
 import { useNavigation } from "@react-navigation/native";
-
-const ChakraAffirmations = ({ chakraData }) => {
-  return (
-    <View style={styles.chakraContainer}>
-      <Text style={styles.chakraTitle}>{chakraData.chakra}</Text>
-      {chakraData.affirmations.map((affirmation, index) => (
-        <Text key={index} style={styles.affirmation}>
-          {`${index + 1}. ${affirmation}`}
-        </Text>
-      ))}
-    </View>
-  );
-};
+import { useTheme } from "../providers/ThemeContext";
 
 const Affirmations = () => {
+  const { darkMode } = useTheme();
   const navigation = useNavigation();
   const handleGoBack = () => {
     navigation.goBack();
@@ -59,10 +48,16 @@ const Affirmations = () => {
       })
     ).start();
   };
+
   const numberOfStars = 500;
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: darkMode ? "black" : "white" },
+      ]}
+    >
       <Animated.View style={styles.background}>
         {[...Array(numberOfStars)].map((_, index) => (
           <Star
@@ -88,6 +83,33 @@ const Affirmations = () => {
     </View>
   );
 };
+
+const ChakraAffirmations = ({ chakraData }) => {
+  const { darkMode } = useTheme();
+  return (
+    <View style={styles.chakraContainer}>
+      <View style={styles.innerContainer}>
+        <Text
+          style={[styles.chakraTitle, { color: darkMode ? "white" : "black" }]}
+        >
+          {chakraData.chakra}
+        </Text>
+        {chakraData.affirmations.map((affirmation, index) => (
+          <Text
+            key={index}
+            style={[
+              styles.affirmation,
+              { color: darkMode ? "white" : "black" },
+            ]}
+          >
+            {`${index + 1}. ${affirmation}`}
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -98,7 +120,14 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
     width: "100%",
     height: "100%",
-    backgroundColor: "black",
+  },
+  innerContainer: {
+    flex: 1,
+    width: "100%",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#8576FF30",
+    borderRadius: 16,
   },
   background: {
     position: "absolute",

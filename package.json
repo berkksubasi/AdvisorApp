@@ -19,6 +19,7 @@
     "@types/react": "~18.2.45",
     "expo": "~50.0.17",
     "expo-dev-client": "~3.3.11",
+    "expo-notifications": "~0.27.7",
     "expo-splash-screen": "0.26.5",
     "expo-status-bar": "~1.11.1",
     "moment": "^2.30.1",

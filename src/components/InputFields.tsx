@@ -27,21 +27,21 @@ const InputFields: React.FC<InputFieldsProps> = ({
   return (
     <View style={styles.container}>
       <InputField
-        placeholder="Name"
+        placeholder="Ad"
         onChangeText={(text) => setName(text)}
         value={name}
         placeholderTextColor={darkMode ? "#ffffff90" : "#00000090"}
         inputTextColor={darkMode ? "#ffffff" : "#000000"}
       />
       <InputField
-        placeholder="Lastname"
+        placeholder="Soyad"
         onChangeText={(text) => setLastname(text)}
         placeholderTextColor={darkMode ? "#ffffff90" : "#00000090"}
         inputTextColor={darkMode ? "#ffffff" : "#000000"}
         value={lastname}
       />
       <InputField
-        placeholder="Maiden Name"
+        placeholder="Kızlık Soyadı"
         onChangeText={(text) => setMaidenName(text)}
         placeholderTextColor={darkMode ? "#ffffff90" : "#00000090"}
         inputTextColor={darkMode ? "#ffffff" : "#000000"}

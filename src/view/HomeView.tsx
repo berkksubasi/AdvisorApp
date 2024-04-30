@@ -1,15 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { Avatar, Icon, Image } from "react-native-elements";
+import { Avatar, Icon } from "react-native-elements";
 import { Card } from "../components/card";
 import { useTheme } from "../providers/ThemeContext";
+import LogoText from "../svg/LogoText";
 
 function HomeView() {
   const navigation = useNavigation();
   const { darkMode } = useTheme();
 
-  const windowWidth = useWindowDimensions().width;
   const numerology = () => {
     navigation.dispatch(CommonActions.navigate("PremiumCalculate"));
   };
@@ -17,6 +17,7 @@ function HomeView() {
   const affirmations = () => {
     navigation.dispatch(CommonActions.navigate("Affirmations"));
   };
+
   return (
     <View
       style={[
@@ -26,36 +27,23 @@ function HomeView() {
     >
       <View style={styles.header}>
         <View style={styles.profile}>
-          <View
-            style={[
-              styles.currency,
-              { borderColor: darkMode ? "white" : "black" },
-            ]}
-          >
+          <View style={styles.currencyContainer}>
             <Icon
               name="dollar-sign"
               type="feather"
-              color={darkMode ? "white" : "black"}
+              color={darkMode ? "#fff" : "#000"}
               size={24}
               style={styles.currencyIcon}
             />
-            <Text
-              style={[
-                styles.currencyText,
-                { color: darkMode ? "white" : "black" },
-              ]}
-            >
-              0.1
-            </Text>
+            <Text style={styles.currencyText}>0.1</Text>
           </View>
-          <Image
-            source={require("../images/logoText.png")}
-            style={{
-              width: windowWidth - 88,
-              height: (windowWidth - 88) * 0.2,
-              resizeMode: "contain",
-            }}
+
+          <LogoText
+            width={300}
+            height={75}
+            color={darkMode ? "#fff" : "#8576FF"}
           />
+
           <Avatar
             rounded
             source={{ uri: "https://i.pravatar.cc/300" }}
@@ -73,48 +61,33 @@ function HomeView() {
           onPress={numerology}
         />
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.cardRow}>
           <Card
             title="JASS Seansı"
             variant="small"
             backgroundImage={require("../images/jass.webp")}
           />
           <Card
-            title="Healy Frekans "
+            title="Healy Frekans"
             variant="small"
             backgroundImage={require("../images/healy.png")}
           />
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.cardRow}>
           <Card
             title="Spritüel Koçluk"
             variant="small"
             backgroundImage={require("../images/coaching.jpeg")}
           />
           <Card
-            title="Bio Rezonans "
+            title="Bio Rezonans"
             variant="small"
             backgroundImage={require("../images/bioresonance.jpeg")}
           />
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={styles.cardRow}>
           <Card
-            title="Olumlamalar "
+            title="Olumlamalar"
             variant="small"
             backgroundImage={require("../images/affirmation.avif")}
             onPress={affirmations}
@@ -136,10 +109,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 30,
     paddingBottom: 80,
-    width: "100%",
-    height: "100%",
   },
   header: {
     alignItems: "center",
@@ -148,42 +119,44 @@ const styles = StyleSheet.create({
   profile: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around", // Spacing items equally
     width: "100%",
-    paddingHorizontal: 20,
+    paddingHorizontal: 20, // Adjust as needed
+    paddingTop: 12,
+    marginBottom: 20,
   },
-  currency: {
+
+  currencyContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 100,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    backgroundColor: "#8576FF",
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
   },
   currencyIcon: {
     marginRight: 5,
   },
   currencyText: {
-    color: "white",
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
   },
-  logo: {
-    width: "50%",
-    resizeMode: "contain",
-  },
   avatarIcon: {
-    borderColor: "white",
+    borderColor: "#fff",
     borderWidth: 1,
   },
   greeting: {
-    color: "white",
+    color: "#000",
     fontSize: 20,
     fontWeight: "bold",
     padding: 4,
     textAlign: "left",
     alignSelf: "flex-start",
+  },
+  cardRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

@@ -21,6 +21,7 @@ import Affirmations from "./src/view/Affirmations";
 import SettingsView from "./src/view/settings/SettingsView";
 import { ThemeProvider, useTheme } from "./src/providers/ThemeContext";
 import EditProfile from "./src/view/settings/EditProfile";
+import { Platform } from "react-native";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -103,19 +104,23 @@ const App = () => {
 
 const TabNavigator = () => {
   const { darkMode } = useTheme(); // Tema bağlamak
-
+  const tabBarHeight = Platform.select({
+    ios: 70,
+    android: 60,
+  });
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          height: 90,
+          height: tabBarHeight,
           paddingHorizontal: 5,
-          paddingTop: 0,
+          paddingVertical: 5,
           backgroundColor: darkMode ? "black" : "white",
           position: "absolute",
           borderTopWidth: 0,
         },
+
         tabBarIcon: ({ color, size }) => {
           let iconName;
 

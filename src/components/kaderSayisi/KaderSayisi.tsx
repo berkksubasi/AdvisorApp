@@ -15,7 +15,7 @@ const KaderSayisi: React.FC<KaderSayisiProps> = ({ title, description }) => {
       <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
         Kader Sayısı: {title}
       </Text>
-      <Text style={{ color: darkMode ? "white" : "black" }}>
+      <Text style={[{ color: darkMode ? "white" : "black" }, styles.content]}>
         Kader sayısı, bu hayatta neyi gerçekleştireceğinizi ve kime
         dönüşeceğinizi gösterebilen bir sayıdır. Adınızın verdiği özellikleri
         öğrenmenizi sağlar, Dünya'ya, atalara ve mekana bağlı özellikler
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 10,
     marginBottom: 10,
-    color: "yellow",
     lineHeight: 12,
   },
 });
