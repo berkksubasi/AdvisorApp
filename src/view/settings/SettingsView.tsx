@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 10,
     borderColor: "#8576FF",
-    borderWidth: 2,
+    borderWidth: 1,
     backgroundColor: "transparent",
     padding: 10,
   },
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   listItem: {
     borderRadius: 10,
     padding: 16,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   mainTitle: {
     fontSize: 24,
