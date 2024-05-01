@@ -14,31 +14,31 @@ interface ModalProps {
   onClose: () => void;
 }
 
-const windowHeight = Dimensions.get("window").height;
+const { height: windowHeight } = Dimensions.get("window");
 
 const ModalComponent: React.FC<ModalProps> = ({ isVisible, onClose }) => {
-  const translateY = useRef(new Animated.Value(1)).current;
+  const translateY = useRef(new Animated.Value(windowHeight)).current;
   const { darkMode } = useTheme();
 
   useEffect(() => {
     if (isVisible) {
       Animated.timing(translateY, {
         toValue: 0,
-        duration: 300,
+        duration: 100,
         useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(translateY, {
-        toValue: 1,
-        duration: 300,
+        toValue: windowHeight,
+        duration: 0,
         useNativeDriver: true,
       }).start();
     }
   }, [isVisible]);
 
   const onDeleteAccount = () => {
-    // Hesap silme
     onClose(); // Modalı kapat
+    // delete account logic here
   };
 
   return (
@@ -46,14 +46,7 @@ const ModalComponent: React.FC<ModalProps> = ({ isVisible, onClose }) => {
       style={[
         styles.container,
         {
-          transform: [
-            {
-              translateY: translateY.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, windowHeight * 0.3],
-              }),
-            },
-          ],
+          transform: [{ translateY }],
         },
       ]}
     >
@@ -62,7 +55,6 @@ const ModalComponent: React.FC<ModalProps> = ({ isVisible, onClose }) => {
           styles.modal,
           {
             backgroundColor: darkMode ? "black" : "white",
-            borderColor: darkMode ? "white" : "black",
           },
         ]}
       >
@@ -71,7 +63,12 @@ const ModalComponent: React.FC<ModalProps> = ({ isVisible, onClose }) => {
         </Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={onClose}>
-            <Text style={[, { color: darkMode ? "white" : "black" }]}>
+            <Text
+              style={[
+                styles.buttonText,
+                { color: darkMode ? "white" : "black" },
+              ]}
+            >
               İptal
             </Text>
           </TouchableOpacity>
@@ -90,28 +87,28 @@ const ModalComponent: React.FC<ModalProps> = ({ isVisible, onClose }) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 0,
+    top: 0,
     left: 0,
     right: 0,
-    backgroundColor: "transparent",
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   modal: {
     padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
     borderWidth: 1,
-    borderTopColor: "#8576FF",
-    borderLeftColor: "#8576FF",
-    borderRightColor: "#8576FF",
-    height: 300,
+    borderColor: "#8576FF",
+    width: "80%",
+    maxHeight: "80%",
   },
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 40,
+    marginBottom: 20,
     textAlign: "center",
   },
   buttonContainer: {
@@ -119,21 +116,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   button: {
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#8576FF",
     flex: 1,
     marginHorizontal: 5,
     alignItems: "center",
-    marginBottom: 50,
   },
   deleteButton: {
     backgroundColor: "#FF6347",
     borderColor: "#FF6347",
   },
   buttonText: {
-    color: "black",
     fontWeight: "bold",
   },
 });
