@@ -48,6 +48,7 @@ function HomeView() {
             rounded
             source={{ uri: "https://i.pravatar.cc/300" }}
             iconStyle={styles.avatarIcon}
+            onPress={() => navigation.navigate("EditProfile" as never)}
           />
         </View>
         <Text
@@ -119,9 +120,9 @@ const styles = StyleSheet.create({
   profile: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around", // Spacing items equally
+    justifyContent: "space-around",
     width: "100%",
-    paddingHorizontal: 20, // Adjust as needed
+    paddingHorizontal: 20,
     paddingTop: 12,
     marginBottom: 20,
   },
