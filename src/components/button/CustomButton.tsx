@@ -5,13 +5,20 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
+  View,
 } from "react-native";
+import { Icon, Switch } from "react-native-elements";
+import { useTheme } from "../../providers/ThemeContext";
 
 interface CustomButtonProps {
   title: string;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   variant?: "primary" | "secondary" | "tertiary";
+  icon?: string;
+  switch?: boolean;
+  switchState?: boolean;
+  onSwitchChange?: () => void;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -19,7 +26,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   onPress,
   style,
   variant = "primary",
+  icon,
+  switch: switchProp,
+  switchState,
+  onSwitchChange,
 }) => {
+  const { darkMode } = useTheme();
+
   const getButtonStyle = () => {
     switch (variant) {
       case "primary":
@@ -47,10 +60,33 @@ const CustomButton: React.FC<CustomButtonProps> = ({
 
   return (
     <TouchableOpacity
-      style={[styles.button, getButtonStyle(), style]}
+      style={[
+        styles.button,
+        getButtonStyle(),
+        style,
+        switchProp && styles.switchButton,
+      ]}
       onPress={onPress}
     >
-      <Text style={styles.buttonText}>{title}</Text>
+      <View style={styles.buttonContent}>
+        {icon && <Icon name={icon} color="#8576FF" style={styles.buttonIcon} />}
+        <Text
+          style={[
+            styles.buttonText,
+            { color: darkMode ? "white" : "black" },
+            icon && styles.buttonTextWithIcon,
+          ]}
+        >
+          {title}
+        </Text>
+      </View>
+      {switchProp && (
+        <Switch
+          value={switchState}
+          onValueChange={onSwitchChange}
+          color="#8576FF"
+        />
+      )}
     </TouchableOpacity>
   );
 };
@@ -65,13 +101,27 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 56,
     alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  buttonContent: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   buttonText: {
-    color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  buttonTextWithIcon: {
+    marginLeft: 8,
+  },
+  buttonIcon: {
+    marginRight: 8,
+  },
+  switchButton: {
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });
 
