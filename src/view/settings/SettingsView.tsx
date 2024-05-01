@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { ListItem, Icon, Switch, Avatar } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../../providers/ThemeContext";
 import * as Notifications from "expo-notifications";
+import ModalComponent from "../../components/modal/ModalComponent";
+import { Avatar, Icon } from "react-native-elements";
+import { CustomButton } from "../../components/button";
 
 const SettingsView = () => {
   const navigation = useNavigation();
@@ -29,9 +31,11 @@ const SettingsView = () => {
 
   // Notification State
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  // Modal State
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    // Uygulama başladığında bildirim izni kontrolü
+    // Uygulama başladığında bildirim iznini kontrol et
     checkNotificationPermission();
   }, []);
 
@@ -40,7 +44,7 @@ const SettingsView = () => {
     setNotificationsEnabled(status === "granted");
   };
 
-  // Bildirim izni talep etme
+  // Notificia izni talep et
   const requestNotificationPermission = async () => {
     const { status } = await Notifications.requestPermissionsAsync();
     setNotificationsEnabled(status === "granted");
@@ -70,6 +74,11 @@ const SettingsView = () => {
     } else {
       requestNotificationPermission();
     }
+  };
+
+  // Modal açma fonksiyonu
+  const openModal = () => {
+    setModalVisible(true);
   };
 
   const settingsList = [
@@ -107,11 +116,12 @@ const SettingsView = () => {
     {
       title: "Çıkış Yap",
       icon: "exit-to-app",
+      onPress: () => {},
     },
     {
       title: "Hesabımı Sil",
       icon: "delete",
-      onPress: () => {},
+      onPress: openModal,
     },
   ];
 
@@ -122,10 +132,20 @@ const SettingsView = () => {
         { backgroundColor: darkMode ? "black" : "white" },
       ]}
     >
-      <Text style={[styles.mainTitle, { color: darkMode ? "white" : "black" }]}>
+      <Text
+        style={[
+          styles.mainTitle,
+          {
+            color: darkMode ? "white" : "black",
+          },
+        ]}
+      >
         Genel Ayarlar
       </Text>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ backgroundColor: darkMode ? "black" : "white" }}
+      >
         <View style={styles.userContainer}>
           <Avatar
             size={60}
@@ -151,30 +171,27 @@ const SettingsView = () => {
           </TouchableOpacity>
         </View>
         {settingsList.map((item, index) => (
-          <ListItem
-            key={item.title} // Her bir öğe için benzersiz bir anahtar ekleyin
-            containerStyle={styles.listItem}
-            bottomDivider
-            onPress={item.onPress ? item.onPress : null} // onPress işlevi yoksa null kullanın
-          >
-            <Icon name={item.icon} color="#8576FF" style={styles.icon} />
-            <ListItem.Content style={styles.content}>
-              <ListItem.Title
-                style={[styles.title, { color: darkMode ? "white" : "black" }]}
-              >
-                {item.title}
-              </ListItem.Title>
-            </ListItem.Content>
-            {item.switch && (
-              <Switch
-                value={item.switchState}
-                onValueChange={item.onSwitchChange}
-                color="#8576FF"
-              />
-            )}
-          </ListItem>
+          <CustomButton
+            key={item.title}
+            title={item.title}
+            icon={item.icon}
+            switch={item.switch}
+            switchState={item.switchState}
+            onSwitchChange={item.onSwitchChange}
+            onPress={item.onPress}
+            style={[
+              styles.listItem,
+              { backgroundColor: darkMode ? "black" : "white" },
+            ]}
+            variant="secondary"
+          />
         ))}
       </ScrollView>
+      {/* Modal  */}
+      <ModalComponent
+        isVisible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };
@@ -223,28 +240,13 @@ const styles = StyleSheet.create({
   listItem: {
     borderRadius: 10,
     padding: 16,
-    borderWidth: 0.5,
-    borderColor: "#8576FF",
     marginBottom: 20,
-    backgroundColor: "transparent",
-  },
-  icon: {
-    fontSize: 24,
-    marginRight: 10,
-  },
-  content: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
   mainTitle: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
     marginTop: 20,
-    color: "black",
     textAlign: "center",
   },
 });
