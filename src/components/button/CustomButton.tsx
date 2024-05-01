@@ -70,15 +70,28 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     >
       <View style={styles.buttonContent}>
         {icon && <Icon name={icon} color="#8576FF" style={styles.buttonIcon} />}
-        <Text
-          style={[
-            styles.buttonText,
-            { color: darkMode ? "white" : "black" },
-            icon && styles.buttonTextWithIcon,
-          ]}
-        >
-          {title}
-        </Text>
+        {!icon && (
+          <Text
+            style={[
+              styles.buttonText,
+              { color: darkMode ? "black" : "white" },
+              !icon && { textAlign: "center", width: "100%" },
+            ]}
+          >
+            {title}
+          </Text>
+        )}
+        {icon && (
+          <Text
+            style={[
+              styles.buttonText,
+              { color: darkMode ? "white" : "black" },
+              styles.buttonTextWithIcon,
+            ]}
+          >
+            {title}
+          </Text>
+        )}
       </View>
       {switchProp && (
         <Switch
