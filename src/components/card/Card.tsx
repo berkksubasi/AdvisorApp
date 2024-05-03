@@ -7,6 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTheme } from "../../providers/ThemeContext";
 
 interface CardProps {
   title?: string;
@@ -17,6 +18,7 @@ interface CardProps {
   children?: React.ReactNode;
 }
 
+const darkMode = useTheme;
 const Card: React.FC<CardProps> = ({
   children,
   title,
@@ -27,7 +29,12 @@ const Card: React.FC<CardProps> = ({
   const cardStyles = variant === "small" ? smallCardStyles : largeCardStyles;
 
   return (
-    <View style={cardStyles.card}>
+    <View
+      style={[
+        cardStyles.card,
+        { backgroundColor: darkMode ? "black" : "black" },
+      ]}
+    >
       <TouchableOpacity onPress={onPress}>
         <ImageBackground
           source={backgroundImage}
@@ -49,7 +56,7 @@ const largeCardStyles = StyleSheet.create({
     borderColor: "#8576FF",
     borderWidth: 1,
     overflow: "hidden",
-    elevation: 3,
+    elevation: 1,
     width: windowWidth - 30,
     aspectRatio: 16 / 9,
     marginTop: 20,
@@ -96,10 +103,11 @@ const smallCardStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowColor: "rgba(0, 0, 0, 1)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 5,
     margin: 8,
+    width: "100%",
   },
 });
 
