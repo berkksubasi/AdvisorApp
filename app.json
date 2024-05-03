@@ -16,7 +16,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.observerdev.soultouch"
+      "bundleIdentifier": "com.observerdev.soultouch",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Uygulama fotoğrafları seçmek için galeriye erişim istiyor."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -33,6 +36,14 @@
       "eas": {
         "projectId": "8e34543b-f90b-4ebf-8c09-f70ec42e43b4"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Uygulama fotoğrafları seçmek için galeriye erişim istiyor."
+        }
+      ]
+    ]
   }
 }
