@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { Avatar, Icon } from "react-native-elements";
 import { Card } from "../components/card";
+
+import Profile from "../components/profile/Profile";
 import { useTheme } from "../providers/ThemeContext";
-import LogoText from "../svg/LogoText";
 
 function HomeView() {
   const navigation = useNavigation();
@@ -26,31 +26,8 @@ function HomeView() {
       ]}
     >
       <View style={styles.header}>
-        <View style={styles.profile}>
-          <View style={styles.currencyContainer}>
-            <Icon
-              name="dollar-sign"
-              type="feather"
-              color={darkMode ? "#fff" : "#000"}
-              size={24}
-              style={styles.currencyIcon}
-            />
-            <Text style={styles.currencyText}>0.1</Text>
-          </View>
+        <Profile />
 
-          <LogoText
-            width={300}
-            height={75}
-            color={darkMode ? "#fff" : "#8576FF"}
-          />
-
-          <Avatar
-            rounded
-            source={{ uri: "https://i.pravatar.cc/300" }}
-            iconStyle={styles.avatarIcon}
-            onPress={() => navigation.navigate("EditProfile" as never)}
-          />
-        </View>
         <Text
           style={[styles.greeting, { color: darkMode ? "white" : "black" }]}
         >
@@ -117,38 +94,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
   },
-  profile: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    width: "100%",
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    marginBottom: 20,
-  },
-
-  currencyContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#8576FF",
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  currencyIcon: {
-    marginRight: 5,
-  },
-  currencyText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  avatarIcon: {
-    borderColor: "#fff",
-    borderWidth: 1,
-  },
   greeting: {
-    color: "#000",
+    color: "black",
     fontSize: 20,
     fontWeight: "bold",
     padding: 4,
