@@ -39,6 +39,7 @@ const RuhGudusu: React.FC<RuhGudusuProps> = ({
       {yapiciPotansiyeller &&
         yapiciPotansiyeller.map((item, index) => (
           <Text
+            key={`yapici_${index}`}
             style={[
               styles.descriptionItem,
               { color: darkMode ? "white" : "black" },
@@ -47,12 +48,14 @@ const RuhGudusu: React.FC<RuhGudusuProps> = ({
             {item}
           </Text>
         ))}
+
       <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
         Olumsuz Potansiyeller
       </Text>
       {olumsuzPotansiyeller &&
         olumsuzPotansiyeller.map((item, index) => (
           <Text
+            key={`olumsuz_${index}`}
             style={[
               styles.descriptionItem,
               { color: darkMode ? "white" : "black" },
@@ -67,6 +70,7 @@ const RuhGudusu: React.FC<RuhGudusuProps> = ({
       {yikiciPotansiyeller &&
         yikiciPotansiyeller.map((item, index) => (
           <Text
+            key={`yikici_${index}`}
             style={[
               styles.descriptionItem,
               { color: darkMode ? "white" : "black" },
