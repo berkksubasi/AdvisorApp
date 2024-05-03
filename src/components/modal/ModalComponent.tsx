@@ -24,7 +24,7 @@ const ModalComponent: React.FC<ModalProps> = ({ isVisible, onClose }) => {
     if (isVisible) {
       Animated.timing(translateY, {
         toValue: 0,
-        duration: 100,
+        duration: 0,
         useNativeDriver: true,
       }).start();
     } else {
