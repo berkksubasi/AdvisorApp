@@ -100,3 +100,5 @@ const esmaulHusnaDATA =
   { id: 98, name: "Er-Reşîd", meaning: "Doğru yolu gösteren" },
   { id: 99, name: "Es-Sabûr", meaning: "Çok sabırlı" }
 ]
+
+export default esmaulHusnaDATA;
