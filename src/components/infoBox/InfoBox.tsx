@@ -55,7 +55,7 @@ const InfoBox = ({
         <ChakraSutunu key={4} chakraCounts={chakraCounts} />
       </View>
       <View style={styles.container}>
-        <EsmaulHusna key={5} esmaulHusnaResult={esmaulHusnaResult.toString()} />
+        <EsmaulHusna key={5} esmaulHusnaResult={esmaulHusnaResult} />
       </View>
       <View style={styles.container}>
         <AuraRengi

@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { useTheme } from "../../providers/ThemeContext";
+import esmaulHusnaDATA from "../../data/esmaulHusnaDATA";
 
 interface EsmaulHusnaProps {
   esmaulHusnaResult: string;
@@ -20,6 +21,12 @@ const EsmaulHusna: React.FC<EsmaulHusnaProps> = ({ esmaulHusnaResult }) => {
         ]}
       >
         {esmaulHusnaResult}. Esma
+      </Text>
+      <Text style={[styles.title, { color: darkMode ? "white" : "black" }]}>
+        {esmaulHusnaDATA[parseInt(esmaulHusnaResult) - 1]?.name}
+      </Text>
+      <Text style={[styles.descriptionItem, { color: darkMode ? "white" : "black" }]}>
+        {esmaulHusnaDATA[parseInt(esmaulHusnaResult) - 1]?.meaning}
       </Text>
     </View>
   );
